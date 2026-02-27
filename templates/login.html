@@ -1,0 +1,44 @@
+{% extends 'commen.html' %}
+{% load static %}
+
+{% block content %}
+
+{% for m in messages %}
+<script>alert("{{ m }}");</script>
+{% endfor %}
+
+<section class="contact_section layout_padding">
+    <div class="container">
+        <div class="heading_container">
+            <h2>Login</h2>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form_container contact-form">
+
+                    <form action="" method="POST">
+                        {% csrf_token %}
+
+                        <div>
+                            <input type="text" name="email" placeholder="Email" required>
+                        </div>
+
+                        <div>
+                            <input type="password" name="password" placeholder="Password" required>
+                        </div>
+
+                        <div class="btn_box mt-3">
+                            <button type="submit">Login</button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,161 @@
+{% extends 'commen.html' %}
+{% load static %}
+
+{% block content %}
+
+<section class="contact_section layout_padding">
+  <div class="container">
+
+    <div class="heading_container mb-4 text-center">
+      <h2>Recipient Registration</h2>
+      <p>Please fill in the details below to register as a recipient.</p>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card shadow" style="border-radius:10px;">
+          <div class="card-header bg-primary text-white text-center" style="border-radius:10px 10px 0 0;">
+            <h4 class="mb-0">Create Account</h4>
+          </div>
+          <div class="card-body p-4">
+
+            {% if messages %}
+            {% for msg in messages %}
+            <div class="alert alert-danger text-center">{{ msg }}</div>
+            {% endfor %}
+            {% endif %}
+
+            <form action="" method="POST" id="recipientRegForm" novalidate>
+              {% csrf_token %}
+
+              <div class="form-row">
+                <div class="col-md-6 mb-3">
+                  <label for="name">Full Name <span class="text-danger">*</span></label>
+                  <input type="text" id="name" name="name" class="form-control" placeholder="e.g. John Doe" required
+                    minlength="3" pattern="[A-Za-z .]+"
+                    title="Name should contain only letters, spaces, or dots (min 3 characters)">
+                  <div class="invalid-feedback">Please enter a valid name (min 3 characters, letters only).</div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label for="phone">Phone Number <span class="text-danger">*</span></label>
+                  <input type="tel" id="phone" name="phone" class="form-control" placeholder="10-digit mobile number"
+                    required minlength="10" maxlength="10" title="Enter a valid phone number">
+                  <div class="invalid-feedback">Please enter a valid 10-digit phone number.</div>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="email">Email Address <span class="text-danger">*</span></label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="example@email.com"
+                  required title="Enter a valid email address">
+                <div class="invalid-feedback">Please enter a valid email address.</div>
+              </div>
+
+              <div class="form-row">
+                <div class="col-md-6 mb-3">
+                  <label for="password">Password <span class="text-danger">*</span></label>
+                  <input type="password" id="password" name="password" class="form-control"
+                    placeholder="Min 8 characters" required minlength="8"
+                    title="Password must be at least 8 characters">
+                  <div class="invalid-feedback">Password must be at least 8 characters long.</div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label for="confirm_password">Confirm Password <span class="text-danger">*</span></label>
+                  <input type="password" id="confirm_password" name="confirm_password" class="form-control"
+                    placeholder="Re-enter password" required>
+                  <div class="invalid-feedback" id="confirm_password_error">Passwords do not match.</div>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="col-md-6 mb-3">
+                  <label for="age">Age <span class="text-danger">*</span></label>
+                  <input type="number" id="age" name="age" class="form-control" placeholder="Your age" required min="1"
+                    max="120" title="Enter a valid age between 1 and 120">
+                  <div class="invalid-feedback">Please enter a valid age (1–120).</div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label for="gender">Gender <span class="text-danger">*</span></label>
+                  <select id="gender" name="gender" class="form-control" required>
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                  <div class="invalid-feedback">Please select a gender.</div>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="blood_group">Blood Group <span class="text-danger">*</span></label>
+                <select id="blood_group" name="blood_group" class="form-control" required>
+                  <option value="">Select Blood Group</option>
+                  <option value="A+">A+</option>
+                  <option value="A-">A-</option>
+                  <option value="B+">B+</option>
+                  <option value="B-">B-</option>
+                  <option value="AB+">AB+</option>
+                  <option value="AB-">AB-</option>
+                  <option value="O+">O+</option>
+                  <option value="O-">O-</option>
+                </select>
+                <div class="invalid-feedback">Please select a blood group.</div>
+              </div>
+
+              <div class="mb-3">
+                <label for="address">Address <span class="text-danger">*</span></label>
+                <textarea id="address" name="address" class="form-control" rows="3"
+                  placeholder="Complete address (min 10 characters)" required minlength="10"
+                  title="Address must be at least 10 characters long"></textarea>
+                <div class="invalid-feedback">Please enter a complete address (min 10 characters).</div>
+              </div>
+
+              <div class="text-center mt-3">
+                <button type="submit" class="btn btn-primary px-5">Register</button>
+                <p class="mt-2">Already have an account? <a href="/login/">Login here</a></p>
+              </div>
+
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  (function () {
+    'use strict';
+    var form = document.getElementById('recipientRegForm');
+    form.addEventListener('submit', function (event) {
+      var pwd = document.getElementById('password');
+      var cpwd = document.getElementById('confirm_password');
+      if (pwd.value !== cpwd.value) {
+        cpwd.setCustomValidity('Passwords do not match.');
+      } else {
+        cpwd.setCustomValidity('');
+      }
+      if (!form.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      form.classList.add('was-validated');
+    }, false);
+
+    document.getElementById('confirm_password').addEventListener('input', function () {
+      var pwd = document.getElementById('password');
+      if (this.value !== pwd.value) {
+        this.setCustomValidity('Passwords do not match.');
+      } else {
+        this.setCustomValidity('');
+      }
+    });
+  })();
+</script>
+
+{% endblock %}

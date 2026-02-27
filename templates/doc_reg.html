@@ -1,0 +1,127 @@
+{% extends 'commen.html' %}
+{% load static %}
+
+{% block content %}
+<section class="contact_section layout_padding">
+  <div class="container">
+
+    <div class="heading_container mb-4 text-center">
+      <h2>Doctor Registration</h2>
+      <p>Register to manage appointments and donor records.</p>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card shadow" style="border-radius:10px;">
+          <div class="card-header bg-info text-white text-center" style="border-radius:10px 10px 0 0;">
+            <h4 class="mb-0">Create Doctor Account</h4>
+          </div>
+          <div class="card-body p-4">
+
+            {% if messages %}
+            {% for msg in messages %}
+            <div class="alert alert-danger text-center">{{ msg }}</div>
+            {% endfor %}
+            {% endif %}
+
+            <form action="" method="POST" id="doctorRegForm" novalidate>
+              {% csrf_token %}
+
+              <!-- Name + Phone -->
+              <div class="form-row">
+                <div class="col-md-6 mb-3">
+                  <label for="name">Full Name <span class="text-danger">*</span></label>
+                  <input type="text" id="name" name="name" class="form-control" placeholder="Dr. Full Name" required
+                    minlength="3" pattern="[A-Za-z. ]+"
+                    title="Name should contain only letters, spaces, or dots (min 3 characters)">
+                  <div class="invalid-feedback">Please enter a valid name (min 3 characters).</div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label for="phone">Phone Number <span class="text-danger">*</span></label>
+                  <input type="tel" id="phone" name="phone" class="form-control" placeholder="10-digit mobile number"
+                    required minlength="10" maxlength="10" title="Enter a valid phone number">
+                  <div class="invalid-feedback">Please enter a valid phone number.</div>
+                </div>
+              </div>
+
+              <!-- Email -->
+              <div class="mb-3">
+                <label for="email">Email Address <span class="text-danger">*</span></label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="doctor@hospital.com"
+                  required>
+                <div class="invalid-feedback">Please enter a valid email address.</div>
+              </div>
+
+              <!-- Password + Confirm -->
+              <div class="form-row">
+                <div class="col-md-6 mb-3">
+                  <label for="password">Password <span class="text-danger">*</span></label>
+                  <input type="password" id="password" name="password" class="form-control"
+                    placeholder="Min 8 characters" required minlength="8">
+                  <div class="invalid-feedback">Password must be at least 8 characters.</div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label for="confirm_password">Confirm Password <span class="text-danger">*</span></label>
+                  <input type="password" id="confirm_password" name="confirm_password" class="form-control"
+                    placeholder="Re-enter password" required>
+                  <div class="invalid-feedback">Passwords do not match.</div>
+                </div>
+              </div>
+
+              <!-- Address -->
+              <div class="mb-3">
+                <label for="address">Hospital / Work Address <span class="text-danger">*</span></label>
+                <textarea id="address" name="address" class="form-control" rows="3"
+                  placeholder="Hospital or clinic address" required minlength="10"
+                  title="Address must be at least 10 characters"></textarea>
+                <div class="invalid-feedback">Please enter a complete address (min 10 characters).</div>
+              </div>
+
+              <div class="text-center mt-3">
+                <button type="submit" class="btn btn-info px-5 text-white">Register as Doctor</button>
+                <p class="mt-2">Already have an account? <a href="/login/">Login here</a></p>
+              </div>
+
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  (function () {
+    'use strict';
+    var form = document.getElementById('doctorRegForm');
+    form.addEventListener('submit', function (event) {
+      var pwd = document.getElementById('password');
+      var cpwd = document.getElementById('confirm_password');
+      if (pwd.value !== cpwd.value) {
+        cpwd.setCustomValidity('Passwords do not match.');
+      } else {
+        cpwd.setCustomValidity('');
+      }
+      if (!form.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      form.classList.add('was-validated');
+    }, false);
+
+    document.getElementById('confirm_password').addEventListener('input', function () {
+      var pwd = document.getElementById('password');
+      if (this.value !== pwd.value) {
+        this.setCustomValidity('Passwords do not match.');
+      } else {
+        this.setCustomValidity('');
+      }
+    });
+  })();
+</script>
+
+{% endblock %}
