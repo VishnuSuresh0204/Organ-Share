@@ -1,0 +1,84 @@
+{% extends 'ADMIN/commen.html' %}
+{% load static %}
+
+{% for m in messages %}
+<script>alert("{{ m }}");</script>
+{% endfor %}
+{% block content %}
+
+<section class="contact_section layout_padding">
+  <div class="container">
+
+    <div class="heading_container">
+      <h2>View Doctors</h2>
+    </div>
+
+    {% if messages %}
+    {% for msg in messages %}
+    <p style="color: green; text-align: center; font-weight: bold;">{{ msg }}</p>
+    {% endfor %}
+    {% endif %}
+
+    <div class="row justify-content-center">
+      <div class="col-md-10">
+
+        <div class="form_container contact-form" style="padding: 20px;">
+
+          <table class="table table-bordered table-striped" style="background:white;">
+            <thead class="table-dark">
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {% for d in doctors %}
+              <tr>
+                <td>{{ d.name }}</td>
+                <td>{{ d.email }}</td>
+                <td>{{ d.phone }}</td>
+                <td>{{ d.address }}</td>
+
+                <td>
+                  {% if d.status == 0 %}
+                  <span class="badge bg-warning">Pending</span>
+                  {% elif d.status == 1 %}
+                  <span class="badge bg-success">Approved</span>
+                  {% else %}
+                  <span class="badge bg-danger">Blocked/Rejected</span>
+                  {% endif %}
+                </td>
+
+                <td>
+                  {% if d.status == 0 %}
+                  <a href="/approve_doctor?id={{ d.id }}&status=1" class="btn btn-success btn-sm">Approve</a>
+                  <a href="/approve_doctor?id={{ d.id }}&status=0" class="btn btn-danger btn-sm">Reject</a>
+                  {% elif d.status == 1 %}
+                  <a href="/approve_doctor?id={{ d.id }}&status=0" class="btn btn-danger btn-sm"
+                    onclick="return confirm('Block this doctor?')">Block</a>
+                  {% else %}
+                  <a href="/approve_doctor?id={{ d.id }}&status=1" class="btn btn-success btn-sm"
+                    onclick="return confirm('Unblock this doctor?')">Unblock</a>
+                  {% endif %}
+
+                </td>
+
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

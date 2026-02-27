@@ -1,0 +1,87 @@
+{% extends 'USER/commen.html' %}
+{% load static %}
+{% for m in messages %}
+<script>alert("{{ m }}");</script>
+{% endfor %}
+{% block content %}
+
+<section class="contact_section layout_padding">
+    <div class="container">
+
+        <div class="heading_container mb-4">
+            <h2>Edit My Profile</h2>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+
+                <div class="card shadow" style="border-radius: 10px;">
+                    <div class="card-header bg-primary text-white text-center" style="border-radius: 10px 10px 0 0;">
+                        <h4>Update Details</h4>
+                    </div>
+
+                    <div class="card-body">
+
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+
+                            <div class="mb-3 text-center">
+                                {% if user.image %}
+                                <img src="{{ user.image.url }}" alt="Profile Image"
+                                    class="img-fluid rounded-circle mb-3"
+                                    style="width: 100px; height: 100px; object-fit: cover;">
+                                {% endif %}
+                                <label for="image" class="form-label d-block">Profile Image</label>
+                                <input type="file" id="image" name="image" class="form-control" accept="image/*">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Full Name</label>
+                                <input type="text" id="name" name="name" class="form-control" value="{{ user.name }}"
+                                    required minlength="3" pattern="[A-Za-z. ]+"
+                                    title="Name should contain only letters, spaces, or dots (min 3 characters)">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input type="tel" id="phone" name="phone" class="form-control" value="{{ user.phone }}"
+                                    required minlength="10" maxlength="15"
+                                    title="Enter a valid phone number (min 10 digits)">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Address</label>
+                                <textarea id="address" name="address" class="form-control" rows="3" required
+                                    minlength="10"
+                                    title="Address must be at least 10 characters long">{{ user.address }}</textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="blood_group" class="form-label">Blood Group</label>
+                                <input type="text" id="blood_group" name="blood_group" class="form-control"
+                                    value="{{ user.blood_group }}" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="age" class="form-label">Age</label>
+                                <input type="number" id="age" name="age" class="form-control" value="{{ user.age }}"
+                                    min="1">
+                            </div>
+
+                            <div class="text-center mt-4">
+                                <button type="submit" class="btn btn-success">Save Changes</button>
+                                <a href="/recipient_profile" class="btn btn-secondary">Cancel</a>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

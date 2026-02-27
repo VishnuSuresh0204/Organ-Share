@@ -1,0 +1,87 @@
+{% extends 'ADMIN/commen.html' %}
+{% load static %}
+{% for m in messages %}
+<script>alert("{{ m }}");</script>
+{% endfor %}
+{% block content %}
+
+<section class="contact_section layout_padding">
+  <div class="container">
+
+    <div class="heading_container">
+      <h2>View Recipients</h2>
+    </div>
+
+    {% if messages %}
+      {% for msg in messages %}
+        <p style="color: green; text-align: center; font-weight: bold;">{{ msg }}</p>
+      {% endfor %}
+    {% endif %}
+
+    <div class="row justify-content-center">
+      <div class="col-md-10">
+
+        <div class="form_container contact-form" style="padding: 20px;">
+
+          <table class="table table-bordered table-striped" style="background:white;">
+            <thead class="table-dark">
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Blood Group</th>
+                <th>Age</th>
+                <th>Address</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {% for r in recipients %}
+              <tr>
+                <td>{{ r.name }}</td>
+                <td>{{ r.email }}</td>
+                <td>{{ r.phone }}</td>
+                <td>{{ r.blood_group }}</td>
+                <td>{{ r.age }}</td>
+                <td>{{ r.address }}</td>
+
+                <td>
+                  {% if r.status == 0 %}
+                    <span class="badge bg-warning">Pending</span>
+                  {% elif r.status == 1 %}
+                    <span class="badge bg-success">Approved</span>
+                  {% else %}
+                    <span class="badge bg-danger">Blocked/Rejected</span>
+                  {% endif %}
+                </td>
+
+                <td>
+                  {% if r.status == 0 %}
+                    <a href="/approve_recipient?id={{ r.id }}&status=1" class="btn btn-success btn-sm">Approve</a>
+                    <a href="/approve_recipient?id={{ r.id }}&status=0" class="btn btn-danger btn-sm">Reject</a>
+
+                  {% elif r.status == 1 %}
+                    <a href="/approve_recipient?id={{ r.id }}&status=0" class="btn btn-danger btn-sm" onclick="return confirm('Block this recipient?')">Block</a>
+
+                  {% else %}
+                    <a href="/approve_recipient?id={{ r.id }}&status=1" class="btn btn-success btn-sm" onclick="return confirm('Unblock this recipient?')">Unblock</a>
+                  {% endif %}
+                </td>
+
+              </tr>
+              {% endfor %}
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

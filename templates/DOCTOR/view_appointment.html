@@ -1,0 +1,103 @@
+{% extends 'DOCTOR/commen.html' %}
+{% load static %}
+{% for m in messages %}
+<script>alert("{{ m }}");</script>
+{% endfor %}
+{% block content %}
+<div class="container mt-5 mb-5">
+    <h2 class="mb-4 text-primary">Appointments for Dr. {{ doctor.name }}</h2>
+
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <!-- Recipient Appointments -->
+    <h3 class="mt-4 mb-3 text-secondary">Recipient Appointments</h3>
+    {% if recipient_appointments %}
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Recipient Name</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Time</th>
+                    <th scope="col">Purpose</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in recipient_appointments %}
+                <tr>
+                    <td>{{ app.recipient.name }}</td>
+                    <td>{{ app.slot.date|date:"D, d M Y" }}</td>
+                    <td>{{ app.slot.start_time|time:"H:i" }} - {{ app.slot.end_time|time:"H:i" }}</td>
+                    <td>
+                        {% if app.purpose %}
+                        {{ app.purpose }}
+                        {% else %}
+                        <span class="badge bg-secondary">Not specified</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="/doc_view_user/?id={{ app.recipient.id }}" class="btn btn-sm btn-primary">
+                            View Details
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="text-muted">No recipient appointments scheduled yet.</p>
+    {% endif %}
+
+    <hr class="my-5">
+
+    <!-- Donor Appointments -->
+    <h3 class="mt-4 mb-3 text-secondary">Donor Appointments</h3>
+    {% if donor_appointments %}
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered align-middle">
+            <thead class="table-info">
+                <tr>
+                    <th scope="col">Donor Name</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Time</th>
+                    <th scope="col">Purpose</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in donor_appointments %}
+                <tr>
+                    <td>{{ app.donor.name }}</td>
+                    <td>{{ app.slot.date|date:"D, d M Y" }}</td>
+                    <td>{{ app.slot.start_time|time:"H:i" }} - {{ app.slot.end_time|time:"H:i" }}</td>
+                    <td>
+                        {% if app.purpose %}
+                        {{ app.purpose }}
+                        {% else %}
+                        <span class="badge bg-secondary">Not specified</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="/doc_view_donor_details?id={{ app.donor.id }}" class="btn btn-sm btn-info">
+                            View Details
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="text-muted">No donor appointments scheduled yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

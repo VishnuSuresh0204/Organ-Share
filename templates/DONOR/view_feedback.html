@@ -1,0 +1,39 @@
+{% extends "DONOR/commen.html" %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="heading_container">
+        <h2>My Feedbacks</h2>
+    </div>
+    <div class="mt-3">
+        <a href="/add_feedback/" class="btn btn-primary">Add New Feedback</a>
+    </div>
+
+    <div class="table-responsive mt-4">
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Subject</th>
+                    <th>Message</th>
+                    <th>Rating</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for feedback in feedback_list %}
+                <tr>
+                    <td>{{ feedback.subject }}</td>
+                    <td>{{ feedback.message }}</td>
+                    <td>{{ feedback.rating }}/5</td>
+                    <td>{{ feedback.created_at|date:"M d, Y" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">No feedback submitted yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

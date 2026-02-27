@@ -1,0 +1,84 @@
+{% extends "USER/commen.html" %}
+{% for m in messages %}
+<script>alert("{{ m }}");</script>
+{% endfor %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-primary">Available Slots</h2>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <!-- Doctor Filter -->
+    <form method="get" class="mb-4 row g-3 align-items-center">
+        <div class="col-auto">
+            <label for="doctor" class="col-form-label fw-bold">Filter by Doctor:</label>
+        </div>
+        <div class="col-auto">
+            <select name="doctor" id="doctor" class="form-select" onchange="this.form.submit()">
+                <option value="">All Doctors</option>
+                {% for doc in doctors %}
+                    <option value="{{ doc.id }}" {% if selected_doctor == doc.id %}selected{% endif %}>
+                        {{ doc.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    </form>
+
+    <!-- Slots Table -->
+    <div class="table-responsive shadow-sm rounded">
+        <table class="table align-middle mb-0 bg-white">
+            <thead class="table-dark">
+                <tr>
+                    <th>Doctor</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for slot in slots %}
+                <tr class="{% if slot.id in booked_slots %}table-secondary{% else %}table-success{% endif %}">
+                    <td>{{ slot.doctor.name }}</td>
+                    <td>{{ slot.date|date:"D, M d, Y" }}</td>
+                    <td>{{ slot.start_time|time:"H:i" }} - {{ slot.end_time|time:"H:i" }}</td>
+                    <td>
+                        {% if slot.id in booked_slots %}
+                            <button class="btn btn-secondary btn-sm" disabled>Booked</button>
+                        {% else %}
+                            <a href="/book_slot?id={{ slot.id }}" class="btn btn-primary btn-sm">Book</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center py-3 text-muted">No available slots.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .table-success {
+        background-color: #d4edda !important;
+    }
+    .table-secondary {
+        background-color: #e2e3e5 !important;
+        color: #6c757d;
+        font-weight: 500;
+    }
+    .btn-sm {
+        min-width: 80px;
+    }
+    .table td, .table th {
+        vertical-align: middle;
+    }
+</style>
+{% endblock %}

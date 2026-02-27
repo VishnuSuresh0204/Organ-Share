@@ -1,0 +1,81 @@
+{% extends 'USER/commen.html' %}
+{% for m in messages %}
+<script>alert("{{ m }}");</script>
+{% endfor %}
+{% block title %}Edit Feedback{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-3">Edit Feedback</h2>
+
+    {% if feedback_list %}
+    <div class="mb-4">
+        <h5>Your Feedbacks</h5>
+        <table class="table table-bordered table-sm">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Appointment</th>
+                    <th>Subject</th>
+                    <th>Rating</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for fb in feedback_list %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                        Dr. {{ fb.appointment.slot.doctor.name }}<br>
+                        {{ fb.appointment.slot.date }} &nbsp;
+                        {{ fb.appointment.slot.start_time }}–{{ fb.appointment.slot.end_time }}
+                    </td>
+                    <td>{{ fb.subject }}</td>
+                    <td>{{ fb.rating }}/5</td>
+                    <td>
+                        <a href="/edit_feedback?id={{ fb.id }}" class="btn btn-sm btn-primary">Edit</a>
+                        <a href="/delete_feedback?id={{ fb.id }}" class="btn btn-sm btn-danger"
+                           onclick="return confirm('Delete this feedback?')">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p class="alert alert-info">You have not submitted any feedback yet.</p>
+    {% endif %}
+
+    {% if feedback %}
+    <hr>
+    <h4 class="mb-3">Edit Selected Feedback (ID: {{ feedback.id }})</h4>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <!-- keep id in GET or POST; include hidden for POST -->
+        <input type="hidden" name="id" value="{{ feedback.id }}">
+
+        <div class="mb-3">
+            <label for="subject" class="form-label">Subject</label>
+            <input type="text" id="subject" name="subject" class="form-control" 
+                   value="{{ feedback.subject }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="message" class="form-label">Message</label>
+            <textarea id="message" name="message" class="form-control" rows="5" required>{{ feedback.message }}</textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="rating" class="form-label">Rating (1–5)</label>
+            <input type="number" id="rating" name="rating" class="form-control" 
+                   min="1" max="5" step="1" value="{{ feedback.rating }}" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update Feedback</button>
+        <a href="/view_feedback" class="btn btn-secondary">Cancel</a>
+    </form>
+    {% endif %}
+</div>
+{% endblock %}

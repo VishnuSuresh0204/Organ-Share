@@ -1,0 +1,96 @@
+{% extends 'DONOR/commen.html' %}
+{% load static %}
+{% for m in messages %}
+<script>alert("{{ m }}");</script>
+{% endfor %}
+{% block content %}
+
+<section class="contact_section layout_padding">
+    <div class="container">
+
+        <div class="heading_container mb-4">
+            <h2>My Profile</h2>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+
+                <div class="card shadow" style="border-radius: 10px;">
+                    <div class="card-header bg-primary text-white text-center" style="border-radius: 10px 10px 0 0;">
+                        <h4>Donor Details</h4>
+                    </div>
+
+                    <div class="card-body text-center">
+
+                        {% if user.image %}
+                        <img src="{{ user.image.url }}" alt="Profile Image" class="img-fluid rounded-circle mb-3"
+                            style="width: 150px; height: 150px; object-fit: cover;">
+                        {% else %}
+                        <img src="{% static 'images/default-profile.png' %}" alt="Default Profile"
+                            class="img-fluid rounded-circle mb-3"
+                            style="width: 150px; height: 150px; object-fit: cover; background: #eee;">
+                        {% endif %}
+
+                        <table class="table table-borderless text-start mx-auto" style="max-width: 400px;">
+                            <tr>
+                                <th>Name:</th>
+                                <td>{{ user.name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Email:</th>
+                                <td>{{ user.email }}</td>
+                            </tr>
+                            <tr>
+                                <th>Phone:</th>
+                                <td>{{ user.phone }}</td>
+                            </tr>
+                            <tr>
+                                <th>Address:</th>
+                                <td>{{ user.address }}</td>
+                            </tr>
+                            <tr>
+                                <th>Blood Group:</th>
+                                <td>{{ user.blood_group }}</td>
+                            </tr>
+                            <tr>
+                                <th>Age:</th>
+                                <td>{{ user.age }}</td>
+                            </tr>
+                            <tr>
+                                <th>Donate Liver:</th>
+                                <td>{{ user.can_donate_liver|yesno:"Yes,No" }}</td>
+                            </tr>
+                            <tr>
+                                <th>Donate Kidney:</th>
+                                <td>{{ user.can_donate_kidney|yesno:"Yes,No" }}</td>
+                            </tr>
+                            <tr>
+                                <th>After Death Donation:</th>
+                                <td>{{ user.after_death_donation|yesno:"Allowed,Not Allowed" }}</td>
+                            </tr>
+                            <tr>
+                                <th>Status:</th>
+                                <td>
+                                    {% if user.login.is_active %}
+                                    <span class="badge bg-success">Approved</span>
+                                    {% else %}
+                                    <span class="badge bg-warning">Pending</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </table>
+
+                        <div class="text-center mt-4">
+                            <a href="/edit_donor_profile" class="btn btn-primary">Edit Profile</a>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

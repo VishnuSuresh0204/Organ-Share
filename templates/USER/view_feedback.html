@@ -1,0 +1,60 @@
+{% extends 'USER/commen.html' %}
+{% for m in messages %}
+<script>alert("{{ m }}");</script>
+{% endfor %}
+{% block title %}My Feedbacks{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <h2 class="mb-3">My Feedback</h2>
+
+    {% if feedback_list %}
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>Appointment</th>
+                <th>Subject</th>
+                <th>Message</th>
+                <th>Rating</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for fb in feedback_list %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+
+                <td>
+                    Dr. {{ fb.appointment.slot.doctor.name }} <br>
+                    {{ fb.appointment.slot.date }} &nbsp;
+                    {{ fb.appointment.slot.start_time }}–{{ fb.appointment.slot.end_time }}
+                </td>
+
+                <td>{{ fb.subject }}</td>
+                <td>{{ fb.message }}</td>
+                <td>{{ fb.rating }}/5</td>
+
+                <td>
+                    <a href="/edit_feedback?id={{ fb.id }}" class="btn btn-sm btn-primary">Edit</a>
+                    <a href="/delete_feedback?id={{ fb.id }}" 
+                       class="btn btn-sm btn-danger"
+                       onclick="return confirm('Delete this feedback?');">
+                       Delete
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% else %}
+        <p class="alert alert-info">You have not submitted any feedback yet.</p>
+    {% endif %}
+
+    <a href="/recipient_home" class="btn btn-secondary mt-3">Back to Home</a>
+
+</div>
+{% endblock %}

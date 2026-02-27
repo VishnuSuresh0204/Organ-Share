@@ -1,0 +1,56 @@
+{% extends "USER/commen.html" %}
+{% for m in messages %}
+<script>alert("{{ m }}");</script>
+{% endfor %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">My Booked Appointments</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <table class="table table-striped table-hover mt-3 align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Doctor</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Purpose</th>
+                <th>Feedback</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for appointment in appointments %}
+            <tr>
+                <td>{{ appointment.slot.doctor.name }}</td>
+                <td>{{ appointment.slot.date|date:"M d, Y" }}</td>
+                <td>{{ appointment.slot.start_time }} - {{ appointment.slot.end_time }}</td>
+                <td>{{ appointment.purpose|default:"Not specified" }}</td>
+                <td>
+                    {% with feedback=appointment.feedback_set.first %}
+                        {% if feedback %}
+                            <a href="/view_feedback?id={{ feedback.id }}" class="btn btn-info btn-sm">View</a>
+                            <a href="/edit_feedback?id={{ feedback.id }}" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="/delete_feedback?id={{ feedback.id }}" class="btn btn-danger btn-sm">Delete</a>
+                        {% else %}
+                            <a href="/add_feedback?id={{ appointment.id }}" class="btn btn-primary btn-sm">Add Feedback</a>
+                        {% endif %}
+                    {% endwith %}
+                </td>
+
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center text-muted">No appointments booked yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

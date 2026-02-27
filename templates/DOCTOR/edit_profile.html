@@ -1,0 +1,77 @@
+{% extends 'DOCTOR/commen.html' %}
+{% load static %}
+{% for m in messages %}
+<script>alert("{{ m }}");</script>
+{% endfor %}
+{% block content %}
+
+<section class="contact_section layout_padding">
+  <div class="container">
+
+    <div class="heading_container mb-4">
+      <h2>Edit Profile</h2>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+
+        <div class="form_container contact-form shadow p-4" style="background:white; border-radius:10px;">
+
+          {% if messages %}
+          {% for msg in messages %}
+          <div class="alert {% if msg.tags == 'error' %}alert-danger{% else %}alert-success{% endif %} text-center">
+            {{ msg }}
+          </div>
+          {% endfor %}
+          {% endif %}
+
+          <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="mb-3 text-center">
+              {% if doctor.image %}
+              <img src="{{ doctor.image.url }}" alt="Profile Image" class="img-fluid rounded-circle mb-3"
+                style="width: 100px; height: 100px; object-fit: cover;">
+              {% endif %}
+              <label class="form-label d-block">Profile Image</label>
+              <input type="file" name="image" class="form-control" accept="image/*">
+            </div>
+
+            <!-- Name -->
+            <div class="mb-3">
+              <label class="form-label">Full Name</label>
+              <input type="text" name="name" class="form-control" value="{{ doctor.name }}" required minlength="3"
+                pattern="[A-Za-z. ]+" title="Name should contain only letters, spaces, or dots (min 3 characters)">
+            </div>
+
+            <!-- Phone -->
+            <div class="mb-3">
+              <label class="form-label">Phone Number</label>
+              <input type="tel" name="phone" class="form-control" value="{{ doctor.phone }}" required minlength="10"
+                maxlength="15" title="Enter a valid phone number (min 10 digits)">
+            </div>
+
+            <!-- Address -->
+            <div class="mb-3">
+              <label class="form-label">Address</label>
+              <textarea name="address" class="form-control" rows="3" required minlength="10"
+                title="Address must be at least 10 characters long">{{ doctor.address }}</textarea>
+            </div>
+
+            <!-- Submit -->
+            <div class="text-center mt-3">
+              <button type="submit" class="btn btn-primary px-4">Update Profile</button>
+              <a href="/doctor_profile" class="btn btn-secondary px-4">Cancel</a>
+            </div>
+
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

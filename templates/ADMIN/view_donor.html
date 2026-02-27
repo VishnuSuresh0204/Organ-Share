@@ -1,0 +1,113 @@
+{% extends 'ADMIN/commen.html' %}
+{% load static %}
+{% for m in messages %}
+<script>alert("{{ m }}");</script>
+{% endfor %}
+{% block content %}
+<section class="contact_section layout_padding">
+  <div class="container">
+
+    <div class="heading_container">
+      <h2>View Donors</h2>
+    </div>
+
+    {% if messages %}
+    {% for msg in messages %}
+    <p style="color:green; text-align:center;">{{ msg }}</p>
+    {% endfor %}
+    {% endif %}
+
+    <table class="table table-bordered table-striped mt-4">
+      <thead class="table-dark">
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Blood Group</th>
+          <th>Age</th>
+          <th>Address</th>
+          <th>Liver</th>
+          <th>Kidney</th>
+          <th>After Death</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for donor in donors %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ donor.name }}</td>
+          <td>{{ donor.email }}</td>
+          <td>{{ donor.phone }}</td>
+          <td>{{ donor.blood_group }}</td>
+          <td>{{ donor.age }}</td>
+          <td>{{ donor.address }}</td>
+
+          <td>
+            {% if donor.can_donate_liver %}
+            <span class="badge bg-success">Yes</span>
+            {% else %}
+            <span class="badge bg-danger">No</span>
+            {% endif %}
+          </td>
+
+          <td>
+            {% if donor.can_donate_kidney %}
+            <span class="badge bg-success">Yes</span>
+            {% else %}
+            <span class="badge bg-danger">No</span>
+            {% endif %}
+          </td>
+
+          <td>
+            {% if donor.after_death_donation %}
+            <span class="badge bg-info">Allowed</span>
+            {% else %}
+            <span class="badge bg-secondary">No</span>
+            {% endif %}
+          </td>
+
+          <td>
+            {% if donor.status == 1 %}
+            <span class="badge bg-success">Approved</span>
+            {% elif donor.status == 2 %}
+            <span class="badge bg-danger">Blocked/Rejected</span>
+            {% else %}
+            <span class="badge bg-warning">Pending</span>
+            {% endif %}
+          </td>
+
+          <td>
+            {% if donor.status == 0 %}
+            <a href="/approve_donor?id={{ donor.id }}&status=1" class="btn btn-success btn-sm">Approve</a>
+
+            <a href="/approve_donor?id={{ donor.id }}&status=0" class="btn btn-danger btn-sm"
+              onclick="return confirm('Reject this donor?')">
+              Reject
+            </a>
+            {% elif donor.status == 1 %}
+            <a href="/approve_donor?id={{ donor.id }}&status=0" class="btn btn-danger btn-sm"
+              onclick="return confirm('Block this donor?')">
+              Block
+            </a>
+            {% else %}
+            <a href="/approve_donor?id={{ donor.id }}&status=1" class="btn btn-success btn-sm"
+              onclick="return confirm('Unblock this donor?')">
+              Unblock
+            </a>
+            {% endif %}
+          </td>
+
+        </tr>
+        {% endfor %}
+      </tbody>
+
+    </table>
+
+  </div>
+</section>
+
+{% endblock %}

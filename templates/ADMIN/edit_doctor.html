@@ -1,0 +1,74 @@
+{% extends 'ADMIN/commen.html' %}
+{% load static %}
+{% for m in messages %}
+<script>alert("{{ m }}");</script>
+{% endfor %}
+{% block content %}
+
+<section class="contact_section layout_padding">
+  <div class="container">
+
+    <div class="heading_container">
+      <h2>Edit Doctor</h2>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+
+        {% if messages %}
+        {% for msg in messages %}
+        <div class="alert {% if msg.tags == 'error' %}alert-danger{% else %}alert-success{% endif %} text-center">
+          {{ msg }}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <div class="form_container contact-form" style="padding:25px;">
+
+          <form action="" method="POST">
+            {% csrf_token %}
+
+            <!-- Name -->
+            <div class="mb-3">
+              <label class="form-label">Name:</label>
+              <input type="text" name="name" class="form-control" value="{{ doctor.name }}" required minlength="3"
+                pattern="[A-Za-z. ]+" title="Name should contain only letters, spaces, or dots (min 3 characters)">
+            </div>
+
+            <!-- Email (readonly) -->
+            <div class="mb-3">
+              <label class="form-label">Email:</label>
+              <input type="email" class="form-control" value="{{ doctor.email }}" readonly>
+            </div>
+
+            <!-- Phone -->
+            <div class="mb-3">
+              <label class="form-label">Phone:</label>
+              <input type="tel" name="phone" class="form-control" value="{{ doctor.phone }}" required
+                pattern="[6-9]{1}[0-9]{9}" title="Enter a valid 10-digit mobile number">
+            </div>
+
+            <!-- Address -->
+            <div class="mb-3">
+              <label class="form-label">Address:</label>
+              <textarea name="address" class="form-control" rows="3" required minlength="10"
+                title="Address must be at least 10 characters long">{{ doctor.address }}</textarea>
+            </div>
+
+            <!-- Submit -->
+            <div class="btn_box mt-3">
+              <button type="submit" class="btn btn-primary">Update Doctor</button>
+              <a href="/view_doctors" class="btn btn-secondary">Cancel</a>
+            </div>
+
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

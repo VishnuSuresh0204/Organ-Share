@@ -1,0 +1,35 @@
+{% extends 'DOCTOR/commen.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Donor Details</h2>
+
+  <table class="table table-sm table-bordered mt-3">
+    <tr><th>Name</th><td>{{ donor.name }}</td></tr>
+    <tr><th>Email</th><td>{{ donor.email }}</td></tr>
+    <tr><th>Phone</th><td>{{ donor.phone }}</td></tr>
+    <tr><th>Blood Group</th><td>{{ donor.blood_group }}</td></tr>
+    <tr><th>Age</th><td>{{ donor.age }}</td></tr>
+    <tr><th>Address</th><td>{{ donor.address }}</td></tr>
+    <tr>
+      <th>Organs</th>
+      <td>
+        {% if donor.can_donate_liver or donor.can_donate_kidney or donor.after_death_donation %}
+          {% if donor.can_donate_liver %}Liver{% endif %}
+          {% if donor.can_donate_kidney %}
+            {% if donor.can_donate_liver %}, {% endif %}Kidney
+          {% endif %}
+          {% if donor.after_death_donation %}
+            {% if donor.can_donate_liver or donor.can_donate_kidney %}, {% endif %}After-death
+          {% endif %}
+        {% else %}
+          <span class="text-muted">—</span>
+        {% endif %}
+      </td>
+    </tr>
+  </table>
+
+  <a href="/doc_view_donors" class="btn btn-secondary">Back to Donors</a>
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'DOCTOR/commen.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-3">All Donors</h2>
+
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Blood Group</th>
+                <th>Organ</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for d in donors %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ d.name }}</td>
+                <td>{{ d.email }}</td>
+                <td>{{ d.blood_group }}</td>
+
+                <!-- Build a simple comma-separated list from booleans -->
+                <td>
+                  {% if d.can_donate_liver or d.can_donate_kidney or d.after_death_donation %}
+                    {% if d.can_donate_liver %}Liver{% endif %}
+
+                    {% if d.can_donate_kidney %}
+                      {% if d.can_donate_liver %}, {% endif %}Kidney
+                    {% endif %}
+
+                    {% if d.after_death_donation %}
+                      {% if d.can_donate_liver or d.can_donate_kidney %}, {% endif %}After-death
+                    {% endif %}
+                  {% else %}
+                    <span class="text-muted">—</span>
+                  {% endif %}
+                </td>
+
+                <td>
+                    <a href="/doc_view_donor_details?id={{ d.id }}" class="btn btn-sm btn-primary">
+                        View Details
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center">No donors available.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

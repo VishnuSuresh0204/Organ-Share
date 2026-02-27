@@ -1,0 +1,84 @@
+{% extends 'ADMIN/commen.html' %}
+{% load static %}
+{% for m in messages %}
+<script>alert("{{ m }}");</script>
+{% endfor %}
+{% block content %}
+
+<section class="contact_section layout_padding">
+  <div class="container">
+
+    <div class="heading_container">
+      <h2>Edit Recipient</h2>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+
+        {% if messages %}
+        {% for msg in messages %}
+        <div class="alert {% if msg.tags == 'error' %}alert-danger{% else %}alert-success{% endif %} text-center">
+          {{ msg }}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <form method="POST" class="p-4 shadow" style="background:white; border-radius:10px;">
+          {% csrf_token %}
+
+          <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input type="text" name="name" class="form-control" value="{{ recipient.name }}" required minlength="3"
+              pattern="[A-Za-z ]+" title="Name should contain only letters and spaces (min 3 characters)">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-control" value="{{ recipient.email }}" required readonly>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Phone</label>
+            <input type="tel" name="phone" class="form-control" value="{{ recipient.phone }}" required
+              pattern="[6-9]{1}[0-9]{9}" title="Enter a valid 10-digit mobile number">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Blood Group</label>
+            <select name="blood_group" class="form-control" required>
+              <option value="A+" {% if recipient.blood_group=='A+' %} selected {% endif %}>A+</option>
+              <option value="A-" {% if recipient.blood_group=='A-' %} selected {% endif %}>A-</option>
+              <option value="B+" {% if recipient.blood_group=='B+' %} selected {% endif %}>B+</option>
+              <option value="B-" {% if recipient.blood_group=='B-' %} selected {% endif %}>B-</option>
+              <option value="AB+" {% if recipient.blood_group=='AB+' %} selected {% endif %}>AB+</option>
+              <option value="AB-" {% if recipient.blood_group=='AB-' %} selected {% endif %}>AB-</option>
+              <option value="O+" {% if recipient.blood_group=='O+' %} selected {% endif %}>O+</option>
+              <option value="O-" {% if recipient.blood_group=='O-' %} selected {% endif %}>O-</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Age</label>
+            <input type="number" name="age" class="form-control" value="{{ recipient.age }}" required min="1" max="120">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Address</label>
+            <textarea name="address" class="form-control" rows="3" required
+              minlength="10">{{ recipient.address }}</textarea>
+          </div>
+
+          <div class="text-center">
+            <button class="btn btn-primary">Update</button>
+            <a href="/view_recipients" class="btn btn-secondary">Back</a>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}
